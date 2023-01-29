@@ -9,7 +9,13 @@ public class ValidationFilter : IAsyncActionFilter
     {
         if (!context.ModelState.IsValid)
         {
-            var errors = context.ModelState.Where(p => p.Value.Errors.Count > 0).SelectMany(p => p.Value.Errors).Select(p => p.ErrorMessage).ToList();
+            var errors = context.ModelState.Where(p => p.Value.Errors.Count > 0)
+                .Select(p => new ValidationError
+                {
+                    PropertyName = p.Key,
+                    ErrorMessage = p.Value.Errors.Select(e => e.ErrorMessage).First()
+                }).ToList();
+
             throw new ValidationException(errors);
         }
         await next();

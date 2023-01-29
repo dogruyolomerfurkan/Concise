@@ -14,7 +14,7 @@ public static class ErrorResponseFactory
         {
             AuthorizationException => new AuthorizationErrorDetails(exception.Message),
             BusinessException => new BusinessErrorDetails(exception.Message),
-            ValidationException => new ValidationErrorDetails(exception.Message),
+            ValidationException => new ValidationErrorDetails(exception),
             _ => new InternalErrorDetails(exception.Message)
         };
 

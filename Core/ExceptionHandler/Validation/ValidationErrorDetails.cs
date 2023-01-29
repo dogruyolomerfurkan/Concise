@@ -6,11 +6,13 @@ namespace Core.ExceptionHandler.Validation;
 public sealed class ValidationErrorDetails : ProblemDetails
 {
     public object Errors { get; set; } = default!;
-    public ValidationErrorDetails(string messages)
+    public ValidationErrorDetails(Exception exception)
     {
+        var validationException = exception as ValidationException;
+
         Status = StatusCodes.Status400BadRequest;
         Type = "Validation Exception";
         Title = "Validation Error";
-        Errors = messages;
+        Errors = validationException?.Errors!;
     }
 }

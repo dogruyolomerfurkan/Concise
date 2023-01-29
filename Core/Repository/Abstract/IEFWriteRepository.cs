@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace Core.Repository.Abstract;
 
-public interface IEFWriteRepository<T> : IEFRepository<T> where T : BaseEntity, new()
+public interface IEFWriteRepository<T, TId> : IEFRepository<T, TId> where T : BaseEntity<TId>, new()
 {
     /// <summary>
     /// Sign entity as <see cref="EntityState.Added" /> to tracking

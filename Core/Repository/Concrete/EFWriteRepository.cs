@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace Core.Repository.Concrete;
 
-public class EFWriteRepository<T> : IEFWriteRepository<T> where T : BaseEntity, new()
+public class EFWriteRepository<T, TId> : IEFWriteRepository<T, TId> where T : BaseEntity<TId>, new()
 {
     private readonly DbSet<T> _entity;
     private readonly DbContext _dbContext;

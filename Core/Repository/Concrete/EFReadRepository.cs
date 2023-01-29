@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace Core.Repository.Concrete;
 
-public class EFReadRepository<T> : IEFReadRepository<T> where T : BaseEntity, new()
+public class EFReadRepository<T, TId> : IEFReadRepository<T, TId> where T : BaseEntity<TId>, new()
 {
     private readonly DbSet<T> _entity;
 
@@ -25,7 +25,7 @@ public class EFReadRepository<T> : IEFReadRepository<T> where T : BaseEntity, ne
         return query;
     }
 
-    public T? GetById(int id, bool tracking = true, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
+    public T? GetById(TId? id, bool tracking = true, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
     {
         IQueryable<T> query = _entity.AsQueryable();
 
@@ -33,10 +33,10 @@ public class EFReadRepository<T> : IEFReadRepository<T> where T : BaseEntity, ne
 
         if (!tracking) query = query.AsNoTracking();
 
-        return query.FirstOrDefault(p => p.Id == id);
+        return query.FirstOrDefault(p => Equals(p.Id, id));
     }
 
-    public Task<T?> GetByIdAsync(int id, bool tracking = true, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
+    public Task<T?> GetByIdAsync(TId id, bool tracking = true, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
     {
         IQueryable<T> query = _entity.AsQueryable();
 
@@ -44,7 +44,7 @@ public class EFReadRepository<T> : IEFReadRepository<T> where T : BaseEntity, ne
 
         if (!tracking) query = query.AsNoTracking();
 
-        return query.FirstOrDefaultAsync(p => p.Id == id);
+        return query.FirstOrDefaultAsync(p => Equals(p.Id, id));
     }
 
     public int Count(Expression<Func<T, bool>> filter, bool tracking = true)

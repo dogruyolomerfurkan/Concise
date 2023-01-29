@@ -18,7 +18,7 @@ public class EFReadRepository<T> : IEFReadRepository<T> where T : BaseEntity, ne
     {
         IQueryable<T> query = _entity.Where(filter).AsQueryable();
 
-        if (!tracking) query.AsNoTracking();
+        if (!tracking) query = query.AsNoTracking();
 
         if (include != null) query = include(query);
 
